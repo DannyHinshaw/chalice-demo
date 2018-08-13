@@ -25,7 +25,7 @@ cors_config = CORSConfig(
 
 # Have to custom support multiple origins CORS
 _ALLOWED_ORIGINS: set = {
-    'http://allowed1.example.com',
+    'localhost',
     'http://allowed2.example.com',
 }
 
@@ -35,10 +35,10 @@ def index():
     return {'hello': 'world'}
 
 
-@app.route('/', methods=['POST'], content_types=['application/x-www-form-urlencoded'])
-def index_post():
+@app.route('/{states}', methods=['POST'])
+def index_post(states):
     # app.current_request.json_body is only available for the application/json content type, so we use raw_body
-    parsed: dict = parse_qs(app.current_request.raw_body.decode())
+    parsed: dict = app.current_request.json_body
     return {
         'states': parsed.get('states', [])
     }
